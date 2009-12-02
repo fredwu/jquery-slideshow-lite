@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.5.1
+ * v0.5.2
  *
  * Copyright (c) 2009 Fred Wu
  *
