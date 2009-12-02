@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.5.2
+ * v0.5.3
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -13,7 +13,8 @@
 /**
  * Configuration options:
  *
- * pauseSeconds  integer  number of seconds between each photo to be displayed
+ * pauseSeconds  float    number of seconds between each photo to be displayed
+ * fadeSpeed     float    number of seconds for the fading transition, the value should not exceed 'pauseSeconds'
  * width         integer  width of the slideshow, in pixels
  * height        integer  height of the slideshow, in pixels
  * caption       boolean  display photo caption?
@@ -25,6 +26,7 @@
 		
 		var defaults = {
 			pauseSeconds: 2,
+			fadeSpeed: 0.5,
 			width: 468,
 			height: 120,
 			caption: true,
@@ -142,7 +144,7 @@
 			}
 			
 			// show the current slide
-			currentItem.fadeIn(function(){
+			currentItem.fadeIn(options.fadeSpeed*1000, function(){
 				$(target).children("a").hide();
 				$(this).show().css("z-index", 1);
 			});
