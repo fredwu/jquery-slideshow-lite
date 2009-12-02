@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.2
+ * v0.3
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -84,9 +84,10 @@
 		var makeSlideshow = function(current){
 			if (running == false)
 			{
-				$(target).children("a").hide();
-				
-				current.fadeIn().animate({opacity:1}, options.pauseSeconds*1000, function(){
+				current.fadeIn(function(){
+					$(target).children("a").hide();
+					$(this).show();
+				}).animate({opacity:1}, options.pauseSeconds*1000, function(){
 					
 					// rewind to the first item?
 					if (current.children("img").attr("src") == lastItem.children("img").attr("src"))
@@ -119,7 +120,7 @@
 						else
 							makeSlideshow($(target).children("a:nth(" + $(self).text() + ")"));
 						
-					});
+					}).fadeOut();
 					
 					paginationHighlight($(self).text()-1);
 					
@@ -135,7 +136,7 @@
 		// start the slideshow!
 		// ----------------------------------------
 		
-		firstItem.show(); // show the first image immediately
+		// firstItem.show(); // show the first image immediately
 		
 		makeSlideshow(firstItem);
 	};
