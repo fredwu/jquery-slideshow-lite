@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.5
+ * v0.5.1
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -14,9 +14,9 @@
  * Configuration options:
  *
  * pauseSeconds  integer  number of seconds between each photo to be displayed
- * width         boolean  width of the slideshow, in pixels
+ * width         integer  width of the slideshow, in pixels
  * height        integer  height of the slideshow, in pixels
- * caption       boolean  display caption?
+ * caption       boolean  display photo caption?
  * cssClass      string   name of the CSS class, defaults to 'slideshowlite'
  */
 
@@ -120,6 +120,7 @@
 		
 		var makeSlideshow = function(){
 			
+			// pagination click
 			pagination.children("li").children("a").click(function(){
 				if ( ! $(this).hasClass("current"))
 				{
@@ -127,7 +128,7 @@
 					currentItem = $(target).children("a:nth(" + ($(this).text()-1) + ")");
 
 					currentItem.show();
-					startSlideshow(false);
+					startSlideshow();
 				}
 			});
 			
@@ -169,6 +170,6 @@
 		// start the slideshow!
 		// ----------------------------------------
 		
-		startSlideshow(true);
+		startSlideshow();
 	};
 })(jQuery);
