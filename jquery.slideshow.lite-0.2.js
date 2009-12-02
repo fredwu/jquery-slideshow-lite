@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.1
+ * v0.2
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -101,8 +101,6 @@
 			
 			// pagination click
 			pagination.children("li").children("a").click(function(){
-			
-				$(this).unbind("click");
 				
 				if (clicked == false && ! $(this).hasClass("current"))
 				{
@@ -124,9 +122,9 @@
 					});
 					
 					paginationHighlight($(self).text()-1);
+					
+					clicked = true;
 				}
-				
-				clicked = true;
 				
 				return false;
 			});
