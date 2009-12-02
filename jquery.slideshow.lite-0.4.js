@@ -1,13 +1,22 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.3
+ * v0.4
  *
  * Copyright (c) 2009 Fred Wu
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
+ */
+
+/**
+ * Configuration options:
+ *
+ * pauseSeconds  integer  number of seconds between each photo to be displayed
+ * width         boolean  width of the slideshow, in pixels
+ * height        integer  height of the slideshow, in pixels
+ * cssClass      string   name of the CSS class, defaults to 'slideshowlite'
  */
 
 (function($){
@@ -29,7 +38,6 @@
 		var target  = this;
 		var items   = $(target).children("a");
 		var running = false; // ensures there is only one running instance
-		var clicked = false; // prevent slideshow from running multiple instances by clicking too fast
 		
 		// ----------------------------------------
 		// some mandontory styling
@@ -73,6 +81,7 @@
 		// ----------------------------------------
 		
 		var paginationHighlight = function(sequence){
+			pagination.children("li").children("a").fadeTo(100, 1);
 			pagination.children("li").children("a").removeClass("current");
 			pagination.children("li").children("a:nth(" + sequence + ")").addClass("current");
 		}
@@ -103,11 +112,12 @@
 			// pagination click
 			pagination.children("li").children("a").click(function(){
 				
-				if (clicked == false && ! $(this).hasClass("current"))
+				if (running == false && ! $(this).hasClass("current"))
 				{
+					running = true;
+					
 					var self = this;
 					$(target).children("a").hide();
-					running = true;
 					
 					$(target).children("a:nth(" + ($(self).text()-1) + ")").show().animate({opacity:1}, options.pauseSeconds*1000, function(){
 						
@@ -123,8 +133,7 @@
 					}).fadeOut();
 					
 					paginationHighlight($(self).text()-1);
-					
-					clicked = true;
+					pagination.children("li").children("a").fadeTo(0, 0.2);
 				}
 				
 				return false;
@@ -135,8 +144,6 @@
 		// ----------------------------------------
 		// start the slideshow!
 		// ----------------------------------------
-		
-		// firstItem.show(); // show the first image immediately
 		
 		makeSlideshow(firstItem);
 	};
