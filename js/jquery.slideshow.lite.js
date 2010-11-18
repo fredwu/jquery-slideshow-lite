@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.6.0
+ * v0.6.1
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -36,10 +36,8 @@
 		var options = $.extend(defaults, options);
 
 		// ----------------------------------------
-		// slideshow objects and variables
+		// slideshow instance
 		// ----------------------------------------
-
-		var target = this;
 
 		var runInstance = function(target) {
 		  var items  = $("a", target);
@@ -180,8 +178,12 @@
   		startSlideshow();
 		}
 
-		if (target.length > 1) {
-		  target.each(function() {
+		// ----------------------------------------
+		// run the slideshow instances!
+		// ----------------------------------------
+
+		if (this.length > 1) {
+		  this.each(function() {
 		    runInstance(this);
 		  });
 		} else {
