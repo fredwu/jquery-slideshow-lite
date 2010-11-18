@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.5.4
+ * v0.6.0
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -40,141 +40,153 @@
 		// ----------------------------------------
 
 		var target = this;
-		var items  = $(target).children("a");
-		var instance;
 
-		// ----------------------------------------
-		// some mandontory styling
-		// ----------------------------------------
+		var runInstance = function(target) {
+		  var items  = $("a", target);
+  		var instance;
 
-		if ( ! $(this).hasClass(options.cssClass)) $(this).addClass(options.cssClass);
+  		// ----------------------------------------
+  		// some mandontory styling
+  		// ----------------------------------------
 
-		$(this).css({
-			width: options.width + "px",
-			height: options.height + "px"
-		});
+  		if ( ! $(target).hasClass(options.cssClass)) $(target).addClass(options.cssClass);
 
-		// ----------------------------------------
-		// create anchor links to make the structure simpler for manupilation
-		// ----------------------------------------
+  		$(target).css({
+  			width: options.width + "px",
+  			height: options.height + "px"
+  		});
 
-		$(this).children("img").wrap(document.createElement("a"));
-		$(this).children("a").attr("target", "blank");
+  		// ----------------------------------------
+  		// create anchor links to make the structure simpler for manupilation
+  		// ----------------------------------------
 
-		// ----------------------------------------
-		// add item sequence markups
-		// ----------------------------------------
+  		$("img", target).wrap(document.createElement("a"));
+  		$("a", target).attr("target", "blank");
 
-		var i = 1;
-		$(this).children("a").each(function(){
-			$(this).attr("rel", i++);
-		});
+  		// ----------------------------------------
+  		// add item sequence markups
+  		// ----------------------------------------
 
-		// ----------------------------------------
-		// create pagination and caption
-		// ----------------------------------------
+  		var i = 1;
+  		$("a", target).each(function(){
+  			$(this).attr("rel", i++);
+  		});
 
-		$(this).append("<ul></ul>");
-		$(this).append("<ol></ol>");
-		var pagination = $(this).children("ul");
-		var caption = $(this).children("ol");
+  		// ----------------------------------------
+  		// create pagination and caption
+  		// ----------------------------------------
 
-		var i = 1;
-		var j = 0;
-		$(this).children("a").each(function(){
-			pagination.append("<li><a href=\"#\">" + i++ + "</a></li>");
-			caption.append("<li>" + $("#" + $(target).attr("id") + " img:nth(" + j++ + ")").attr("alt") + "</li>");
-		});
-		pagination.fadeTo(0, 0.8);
-		caption.fadeTo(0, 0.6);
-		caption.hide();
+  		$(target).append("<ul></ul>");
+  		$(target).append("<ol></ol>");
+  		var pagination = $("> ul", target);
+  		var caption = $("> ol", target);
 
-		// ----------------------------------------
-		// shortcuts
-		// ----------------------------------------
+  		var i = 1;
+  		var j = 0;
+  		$("a", target).each(function(){
+  			pagination.append("<li><a href=\"#\">" + i++ + "</a></li>");
+  			caption.append("<li>" + $("img:nth(" + j++ + ")", target).attr("alt") + "</li>");
+  		});
+  		pagination.fadeTo(0, 0.8);
+  		caption.fadeTo(0, 0.6);
+  		caption.hide();
 
-		var firstItem   = $(target).children("a:first");
-		var lastItem    = $(target).children("a:last");
-		var currentItem = firstItem;
+  		// ----------------------------------------
+  		// shortcuts
+  		// ----------------------------------------
 
-		// ----------------------------------------
-		// pagination highlight
-		// ----------------------------------------
+  		var firstItem   = $("> a:first", target);
+  		var lastItem    = $("> a:last", target);
+  		var currentItem = firstItem;
 
-		var paginationHighlight = function(sequence){
-			pagination.children("li").children("a").removeClass("current");
-			pagination.children("li").children("a:nth(" + sequence + ")").addClass("current");
+  		// ----------------------------------------
+  		// pagination highlight
+  		// ----------------------------------------
+
+  		var paginationHighlight = function(sequence){
+  			$("> li > a", pagination).removeClass("current");
+  			$("> li > a:nth(" + sequence + ")", pagination).addClass("current");
+  		}
+
+  		// ----------------------------------------
+  		// caption
+  		// ----------------------------------------
+
+  		var showCaption = function(sequence){
+  			caption.show();
+  			$("> li", caption).hide();
+  			$("> li:nth(" + sequence + ")", caption).fadeIn();
+  		}
+
+  		// ----------------------------------------
+  		// slideshow logic
+  		// ----------------------------------------
+
+  		var makeSlideshow = function(){
+
+  			// pagination click
+  			$("> li > a", pagination).click(function(){
+  				if ( ! $(this).hasClass("current"))
+  				{
+  					// select the current item after the pagination click
+  					currentItem = $("a:nth(" + ($(this).text()-1) + ")", target);
+
+  					currentItem.show();
+  					startSlideshow();
+  				}
+  			});
+
+  			// pagination highlight
+  			paginationHighlight(currentItem.attr("rel")-1);
+
+  			// show caption
+  			if (options.caption == true)
+  			{
+  				showCaption(currentItem.attr("rel")-1);
+  			}
+
+        currentItem.css("z-index", 2);
+
+  			// show the current slide
+  			currentItem.fadeIn(options.fadeSpeed*1000, function(){
+  				$("> a", target).hide();
+  				$(this).show().css("z-index", 1);
+  			});
+
+  			// prepare for the next slide
+  			// determines the next item (or we need to rewind to the first item?)
+  			if ($("img", currentItem).attr("src") == $("img", lastItem).attr("src"))
+  			{
+  				currentItem = firstItem;
+  			}
+  			else
+  			{
+  				currentItem = currentItem.next();
+  			}
+
+  			currentItem.css("z-index", 1);
+  		};
+
+  		var startSlideshow = function(){
+  			clearInterval(instance);
+  			makeSlideshow();
+  			instance = setInterval(makeSlideshow, options.pauseSeconds*1000);
+  		};
+
+  		// ----------------------------------------
+  		// start the slideshow!
+  		// ----------------------------------------
+
+  		startSlideshow();
 		}
 
-		// ----------------------------------------
-		// caption
-		// ----------------------------------------
-
-		var showCaption = function(sequence){
-			caption.show();
-			caption.children("li").hide();
-			caption.children("li:nth(" + sequence + ")").fadeIn();
+		if (target.length > 1) {
+		  target.each(function() {
+		    runInstance(this);
+		  });
+		} else {
+		  runInstance(this);
 		}
 
-		// ----------------------------------------
-		// slideshow logic
-		// ----------------------------------------
-
-		var makeSlideshow = function(){
-
-			// pagination click
-			pagination.children("li").children("a").click(function(){
-				if ( ! $(this).hasClass("current"))
-				{
-					// select the current item after the pagination click
-					currentItem = $(target).children("a:nth(" + ($(this).text()-1) + ")");
-
-					currentItem.show();
-					startSlideshow();
-				}
-			});
-
-			// pagination highlight
-			paginationHighlight(currentItem.attr("rel")-1);
-
-			// show caption
-			if (options.caption == true)
-			{
-				showCaption(currentItem.attr("rel")-1);
-			}
-
-      currentItem.css("z-index", 2);
-
-			// show the current slide
-			currentItem.fadeIn(options.fadeSpeed*1000, function(){
-				$(target).children("a").hide();
-				$(this).show().css("z-index", 1);
-			});
-
-			// prepare for the next slide
-			// determines the next item (or we need to rewind to the first item?)
-			if (currentItem.children("img").attr("src") == lastItem.children("img").attr("src"))
-			{
-				currentItem = firstItem;
-			}
-			else
-			{
-				currentItem = currentItem.next();
-			}
-
-			currentItem.css("z-index", 1);
-		};
-
-		var startSlideshow = function(){
-			clearInterval(instance);
-			makeSlideshow();
-			instance = setInterval(makeSlideshow, options.pauseSeconds*1000);
-		};
-
-		// ----------------------------------------
-		// start the slideshow!
-		// ----------------------------------------
-
-		startSlideshow();
 	};
 })(jQuery);
