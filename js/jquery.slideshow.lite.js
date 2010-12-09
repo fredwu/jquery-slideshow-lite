@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.7.0
+ * v0.7.1
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -134,6 +134,7 @@
             currentItem.show();
             startSlideshow();
           }
+          return false;
         });
 
         // pagination highlight
