@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.7.1
+ * v0.8.0
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -11,15 +11,27 @@
  */
 
 /**
+ * Usage:
+ *
+ * // using default options
+ * $("#slideshow").slideshow();
+ *
+ * // using some custom options
+ * $("#slideshow2").slideshow({
+ *   pauseSeconds: 4,
+ *   height: 200,
+ *   caption: false
+ * });
+ *
  * Configuration options:
  *
  * pauseSeconds  float    number of seconds between each photo to be displayed
- * fadeSpeed     float    number of seconds for the fading transition, the value should not exceed 'pauseSeconds'
+ * fadeSpeed     float    number of seconds for the fading transition, the value should not exceed `pauseSeconds`
  * width         integer  width of the slideshow, in pixels
  * height        integer  height of the slideshow, in pixels
  * caption       boolean  display photo caption?
- * cssClass      string   name of the CSS class, defaults to 'slideshowlite'
- * anchorTarget  string   name for the target="_xxx" attribute, defaults to '_self'
+ * cssClass      string   name of the CSS class, defaults to `slideshowlite`
+ * anchorTarget  string   name for the target="_xxx" attribute, defaults to `_self`
  */
 
 (function($){
