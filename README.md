@@ -10,13 +10,48 @@ So, I decided to code my own plugin from the ground up. Meet __Slideshow Lite__!
 
 There are a few options to customise the behaviour of this plugin:
 
-- pauseSeconds  (float)    number of seconds between each photo to be displayed
-- fadeSpeed     (float)    number of seconds for the fading transition, the value should not exceed `pauseSeconds`
-- width         (integer)  width of the slideshow, in pixels
-- height        (integer)  height of the slideshow, in pixels
-- caption       (boolean)  display photo caption?
-- cssClass      (string)   name of the CSS class, defaults to `slideshowlite`
-- anchorTarget  (string)   name for the target="_xxx" attribute, defaults to `_self`
+<table>
+  <tr>
+    <td><strong>Option</strong></td>
+    <td><strong>Type</strong></td>
+    <td><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td>pauseSeconds</td>
+    <td>Float</td>
+    <td>Number of seconds between each photo to be displayed.</td>
+  </tr>
+  <tr>
+    <td>fadeSpeed</td>
+    <td>Float</td>
+    <td>Number of seconds for the fading transition, the value should not exceed `pauseSeconds`.</td>
+  </tr>
+  <tr>
+    <td>width</td>
+    <td>Integer</td>
+    <td>Width of the slideshow, in pixels.</td>
+  </tr>
+  <tr>
+    <td>height</td>
+    <td>Integer</td>
+    <td>Height of the slideshow, in pixels.</td>
+  </tr>
+  <tr>
+    <td>caption</td>
+    <td>Boolean</td>
+    <td>Display photo caption?</td>
+  </tr>
+  <tr>
+    <td>cssClass</td>
+    <td>String</td>
+    <td>Name of the CSS class, defaults to `slideshowlite`.</td>
+  </tr>
+  <tr>
+    <td>anchorTarger</td>
+    <td>String</td>
+    <td>Name for the target="_xxx" attribute, defaults to `_self`.</td>
+  </tr>
+</table>
 
 ## Usage
 
