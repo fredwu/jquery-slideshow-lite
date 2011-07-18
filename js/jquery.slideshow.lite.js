@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.8.0
+ * v0.8.1
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -81,7 +81,7 @@
 
       var i = 1;
       $("a", target).each(function(){
-        $(this).attr("rel", i++);
+        $(this).attr("data-seq", i++);
       });
 
       // ----------------------------------------
@@ -150,12 +150,12 @@
         });
 
         // pagination highlight
-        paginationHighlight(currentItem.attr("rel")-1);
+        paginationHighlight(currentItem.data("seq")-1);
 
         // show caption
         if (options.caption == true)
         {
-          showCaption(currentItem.attr("rel")-1);
+          showCaption(currentItem.data("seq")-1);
         }
 
         currentItem.css("z-index", 2);
