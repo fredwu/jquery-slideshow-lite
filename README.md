@@ -38,6 +38,10 @@ $("#slideshow2").slideshow({
 
 ## Changelog
 
+v0.8.1 [2011-07-19]
+
+- Use HTML5's data attribute `data-seq` instead of `rel` to store sequence data.
+
 v0.8.0 [2011-06-28]
 
 - Added readme to the repository.
