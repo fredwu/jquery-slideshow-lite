@@ -1,4 +1,4 @@
-# Lightweight Slideshow plugin for jQuery
+# Lightweight Slideshow plugin for jQuery [![endorse](http://api.coderwall.com/fredwu/endorsecount.png)](http://coderwall.com/fredwu)
 
 A while ago I was asked to make a simple slideshow. My initial thought was, there must be a ton of solutions available for jQuery, I could easily draw inspiration from them.
 
