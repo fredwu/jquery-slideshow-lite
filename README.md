@@ -139,8 +139,15 @@ v0.1.0 [2009-12-02]
 
 - Initial release.
 
+## More jQuery Plugins
+
+Check out my other jQuery plugins:
+
+- [Endless Scroll](https://github.com/fredwu/jquery-endless-scroll) - Endless/infinite scrolling/pagination.
+- [Inline Confirmation](https://github.com/fredwu/jquery-inline-confirmation) - One of the less obtrusive ways of implementing confirmation dialogues.
+
 ## License
 
-Copyright (c) 2009 Fred Wu
+Copyright (c) 2009-2012 Fred Wu
 
 Dual licensed under the [MIT](http://www.opensource.org/licenses/mit-license.php) and [GPL](http://www.gnu.org/licenses/gpl.html) licenses.
