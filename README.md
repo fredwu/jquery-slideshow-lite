@@ -51,6 +51,11 @@ There are a few options to customise the behaviour of this plugin:
     <td>String</td>
     <td>Name for the target="_xxx" attribute, defaults to `_self`.</td>
   </tr>
+  <tr>
+    <td>disableOnBlur</td>
+    <td>bool</td>
+    <td>Pause the rotation on window blur.</td>
+  </tr>
 </table>
 
 ## Usage
@@ -72,6 +77,13 @@ $("#slideshow2").slideshow({
 [Click here for a simple demo](http://fredwu.github.com/jquery-slideshow-lite/).
 
 ## Changelog
+
+v0.8.2 [2011-07-19] Via Jeremy Pyne http://pynej.blogspot.com/
+
+- Add a option to pause/resume the animation on window blur/focus.
+- Converted to jquery widget interface for added $().slideshow("functionName") support.
+- Added $().slideshow("start") and $().slideshow("stop") methods for script intigration.
+- Added $().slideshow("destroy") to detach events and remove slideshow overlays.
 
 v0.8.1 [2011-07-19]
 
