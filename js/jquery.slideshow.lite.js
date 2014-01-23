@@ -1,7 +1,7 @@
 /**
  * Slideshow Lite plugin for jQuery
  *
- * v0.8.1
+ * v0.8.2
  *
  * Copyright (c) 2009 Fred Wu
  *
@@ -32,40 +32,56 @@
  * caption       boolean  display photo caption?
  * cssClass      string   name of the CSS class, defaults to `slideshowlite`
  * anchorTarget  string   name for the target="_xxx" attribute, defaults to `_self`
+ * disableOnBlur bool     should we pause and resume the rotation on window blur
  */
 
 (function($){
-  $.fn.slideshow = function(options){
+	$.widget("ui.slideshow", $.extend({}, $.ui.widget, {
 
-    var defaults = {
+	options: {
       pauseSeconds: 2,
       fadeSpeed: 0.5,
       width: 468,
       height: 120,
       caption: true,
       cssClass: 'slideshowlite',
-      anchorTarget: '_self'
-    };
-
-    var options = $.extend(defaults, options);
-
+      anchorTarget: '_self',
+      disableOnBlur: false
+	},
+		
+	// ----------------------------------------
+    // run the slideshow instances!
+    // ----------------------------------------
+	_create: function() {
+		if (this.length > 1) {
+		  this.each(function() {
+			this.runInstance(this.element);
+		  });
+		} else {
+		  this.runInstance(this.element);
+		}
+	},
+ 
     // ----------------------------------------
     // slideshow instance
     // ----------------------------------------
-
-    var runInstance = function(target) {
+		instance: null,
+		makeSlideshow: null,
+		
+	runInstance : function(target) {
       var items  = $("a", target);
-      var instance;
+	  var that = this;
+      //var instance;
 
       // ----------------------------------------
       // some mandontory styling
       // ----------------------------------------
 
-      if ( ! $(target).hasClass(options.cssClass)) $(target).addClass(options.cssClass);
+      if ( ! $(target).hasClass(this.options.cssClass)) $(target).addClass(this.options.cssClass);
 
       $(target).css({
-        width: options.width + "px",
-        height: options.height + "px"
+        width: this.options.width + "px",
+        height: this.options.height + "px"
       });
 
       // ----------------------------------------
@@ -73,7 +89,7 @@
       // ----------------------------------------
 
       $("> img", target).wrap(document.createElement("a"));
-      $("a", target).attr("target", options.anchorTarget);
+      $("a", target).attr("target", this.options.anchorTarget);
 
       // ----------------------------------------
       // add item sequence markups
@@ -96,7 +112,7 @@
       var i = 1;
       var j = 0;
       $("a", target).each(function(){
-        pagination.append("<li><a href=\"#\">" + i++ + "</a></li>");
+        pagination.append("<li><a href=\"#\"><span>" + i++ + "</span></a></li>");
         caption.append("<li>" + $("img:nth(" + j++ + ")", target).attr("alt") + "</li>");
       });
       pagination.fadeTo(0, 0.8);
@@ -153,7 +169,7 @@
         paginationHighlight(currentItem.data("seq")-1);
 
         // show caption
-        if (options.caption == true)
+        if (that.options.caption == true)
         {
           showCaption(currentItem.data("seq")-1);
         }
@@ -161,14 +177,15 @@
         currentItem.css("z-index", 2);
 
         // show the current slide
-        currentItem.fadeIn(options.fadeSpeed*1000, function(){
+        currentItem.fadeIn(that.options.fadeSpeed*1000, function(){
           $("> a", target).hide();
           $(this).show().css("z-index", 1);
         });
 
         // prepare for the next slide
         // determines the next item (or we need to rewind to the first item?)
-        if ($("img", currentItem).attr("src") == $("img", lastItem).attr("src"))
+        if ($("img", currentItem).attr("src") == $("img", lastItem).attr("src")
+			&& $(currentItem).data("name") == $(lastItem).data("name") )
         {
           currentItem = firstItem;
         }
@@ -181,29 +198,44 @@
       };
 
       var startSlideshow = function(){
-        clearInterval(instance);
+        clearInterval(that.instance);
         makeSlideshow();
-        instance = setInterval(makeSlideshow, options.pauseSeconds*1000);
+        that.instance = setInterval(makeSlideshow, that.options.pauseSeconds*1000);
       };
+		
+		
+      if(that.options.disableOnBlur) {
+        $(window).focus(function() {
+            clearInterval(that.instance);
+            that.instance = setInterval(makeSlideshow, that.options.pauseSeconds*1000);
+        });
+    
+        $(window).blur(function() {
+            clearInterval(that.instance)
+        });
+      }
 
       // ----------------------------------------
       // start the slideshow!
       // ----------------------------------------
-
+	  this.makeSlideshow = makeSlideshow;
       startSlideshow();
-    }
+    },
+ 	destroy: function() {
+		clearInterval(this.instance);
+		$(window).off("focus");
+		$(window).off("blur");
+	  $("ul,ol", this.element).remove();
+		
+      $.Widget.prototype.destroy.call( this );
+    },
+	stop: function() {
+		clearInterval(this.instance);
+	},
+	start: function() {
+        this.instance = setInterval(this.makeSlideshow, this.options.pauseSeconds*1000);
+	}
 
-    // ----------------------------------------
-    // run the slideshow instances!
-    // ----------------------------------------
-
-    if (this.length > 1) {
-      this.each(function() {
-        runInstance(this);
-      });
-    } else {
-      runInstance(this);
-    }
-
-  };
-})(jQuery);
+    
+  })
+)})(jQuery);
